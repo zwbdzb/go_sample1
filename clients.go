@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"sync"
+	"time"
 )
 
 type Request struct {
@@ -27,9 +28,10 @@ func clients() {
 }
 func ClientReq(r *Request) {
 	defer wg1.Done()
+	var start = time.Now()
 	queue <- r
-	go func() {
-		res := <-r.resultChan
-		fmt.Printf("current args is %d, the result is %d \n", r.args[0], res)
-	}()
+	//	go func() {
+	res := <-r.resultChan
+	fmt.Printf("current args is %d, the result is %d, 耗时： %d ms \n", r.args[0], res, time.Since(start).Milliseconds())
+	// }()
 }

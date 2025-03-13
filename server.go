@@ -4,13 +4,12 @@ package main
 
 import (
 	"fmt"
-	"sync"
 	"time"
 )
 
 var sem = make(chan int, Maxoutstanding)
 
-var wg2 sync.WaitGroup
+// var wg2 sync.WaitGroup
 
 func server(queue chan *Request) {
 	fmt.Printf("Server is already, listen req \n")
@@ -19,9 +18,9 @@ func server(queue chan *Request) {
 		req := req
 		sem <- 1
 
-		wg2.Add(1)
+		//wg2.Add(1)
 		go func() {
-			defer wg2.Done()
+			//defer wg2.Done()
 			process(req)
 			<-sem
 		}()
@@ -37,6 +36,6 @@ func sum(a []int) (s int) {
 	for i := 1; i <= a[0]; i++ {
 		s += i
 	}
-	time.Sleep(time.Millisecond * 20)
+	time.Sleep(time.Millisecond * 50)
 	return s
 }
