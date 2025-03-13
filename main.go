@@ -14,8 +14,7 @@ func main() {
 	go server(queue)
 	var start = time.Now()
 
-	clients()
-
-	wg1.Wait() // 等待所有客户端请求完成
+	// clients()
+	antsClients()
 	fmt.Printf("客户端并发%d请求，服务器请求队列长度%d，服务器限流%d，总共耗时%d ms \n", concurrencyClients, queueLength, Maxoutstanding, time.Since(start).Milliseconds())
 }

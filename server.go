@@ -36,6 +36,6 @@ func sum(a []int) (s int) {
 	for i := 1; i <= a[0]; i++ {
 		s += i
 	}
-	time.Sleep(time.Millisecond * 50)
+	time.Sleep(time.Millisecond * 50) // 模拟服务器处理单次请求耗时50ms
 	return s
 }

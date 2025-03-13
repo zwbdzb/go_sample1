@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"sync"
 	"time"
+
+	"github.com/panjf2000/ants/v2"
 )
 
 type Request struct {
@@ -23,9 +25,25 @@ func clients() {
 		wg1.Add(1)
 		go ClientReq(r)
 	}
-	wg1.Wait() // 到目前为止， golang运行时会检测到：剩余的50个协程都处于阻塞状态，并且没有其他协程可以解除，故会报死锁。
-
+	wg1.Wait()
 }
+
+func antsClients() {
+	wg1.Add(concurrencyClients)
+	pool, _ := ants.NewPool(50)
+	defer pool.Release()
+	for i := 1; i <= concurrencyClients; i++ {
+		r := &Request{
+			args:       []int{i},
+			resultChan: make(chan int),
+		}
+		_ = pool.Submit(func() {
+			ClientReq(r)
+		})
+	}
+	wg1.Wait()
+}
+
 func ClientReq(r *Request) {
 	defer wg1.Done()
 	var start = time.Now()
